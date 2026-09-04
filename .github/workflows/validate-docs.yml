@@ -1,0 +1,94 @@
+name: Validate Documentation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Check docs folder exists
+      run: |
+        if [ -d "docs" ]; then
+          echo "✅ docs folder exists"
+        else
+          echo "❌ docs folder missing"
+          exit 1
+        fi
+    
+    - name: Check required files in docs
+      run: |
+        REQUIRED_FILES=("erd.png" "endpoint-plan.md" "raceday-schema.sql")
+        for file in "${REQUIRED_FILES[@]}"; do
+          if [ -f "docs/$file" ]; then
+            echo "✅ docs/$file exists"
+          else
+            echo "❌ docs/$file is missing"
+            exit 1
+          fi
+        done
+    
+    - name: Check file sizes (ensure not empty)
+      run: |
+        for file in erd.png endpoint-plan.md raceday-schema.sql; do
+          size=$(stat -c%s "docs/$file" 2>/dev/null || stat -f%z "docs/$file" 2>/dev/null)
+          if [ -f "docs/$file" ] && [ "$size" -gt 0 ]; then
+            echo "✅ docs/$file has content ($size bytes)"
+          else
+            echo "❌ docs/$file is empty or missing"
+            exit 1
+          fi
+        done
+    
+    - name: Check SQL file syntax (basic validation)
+      run: |
+        if grep -q "CREATE TABLE" docs/raceday-schema.sql; then
+          echo "✅ SQL file contains CREATE TABLE statements"
+        else
+          echo "❌ SQL file missing CREATE TABLE statements"
+          exit 1
+        fi
+        
+        if grep -q "INSERT INTO" docs/raceday-schema.sql; then
+          echo "✅ SQL file contains INSERT statements"
+        else
+          echo "❌ SQL file missing INSERT statements"
+          exit 1
+        fi
+    
+    - name: Check endpoint plan format
+      run: |
+        if grep -q "HTTP Method" docs/endpoint-plan.md; then
+          echo "✅ Endpoint plan contains required columns"
+        else
+          echo "❌ Endpoint plan missing HTTP Method column"
+          exit 1
+        fi
+    
+    - name: Verify commit count (minimum 20)
+      run: |
+        commit_count=$(git rev-list --count HEAD)
+        echo "Total commits: $commit_count"
+        if [ $commit_count -ge 20 ]; then
+          echo "✅ Repository has $commit_count commits (minimum 20 met)"
+        else
+          echo "❌ Repository has only $commit_count commits (minimum 20 required)"
+          exit 1
+        fi
+    
+    - name: Final validation
+      if: success()
+      run: |
+        echo "✅ All validations passed!"
+        echo "📁 docs folder contains all required files"
+        echo "📊 Commit count meets minimum requirement"
+        echo "🔍 SQL file contains required statements"
+        echo "📝 Endpoint plan file is present"
