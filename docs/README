@@ -1,0 +1,36 @@
+# RaceDay - Documentation
+
+This folder contains all the planning documents for the RaceDay system.
+
+## Files
+
+### 1. erd.png
+Entity Relationship Diagram showing:
+- All 6 database entities
+- Primary and foreign keys
+- Cardinality relationships (one-to-many, many-to-many)
+- Complete data model
+
+### 2. endpoint-plan.md
+API Endpoint Plan containing:
+- HTTP Methods (GET, POST, PUT, DELETE)
+- Routes for all endpoints
+- Descriptions and purposes
+- Role requirements
+- Request/response formats
+- Covering: Authentication, User Profile, Events, Categories, Enrolments, Results
+
+### 3. raceday-schema.sql
+SQL Database Script with:
+- CREATE TABLE statements for all entities
+- Primary keys, foreign keys, and constraints
+- Indexes for performance
+- Sample data (2 organizers, 2 participants, 3 events, categories, enrolments, results)
+- Runs without errors on SSMS
+
+## Documentation Status
+✅ ERD Completed
+✅ API Endpoints Planned
+✅ SQL Schema Created
+✅ Sample Data Populated
+✅ GitHub Actions Configured
