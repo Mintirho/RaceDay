@@ -23,7 +23,7 @@ RaceDay is a comprehensive event management system designed for organizing and m
 
 ## Documentation
 - [Entity Relationship Diagram](docs/erd.png)
-- [API Endpoint Plan](docs/endpoint-plan.md)
+- [API Endpoint Plan](docs/Prog API.pdf)
 - [Database Schema SQL](docs/raceday-schema.sql)
 
 ## CI/CD Status
