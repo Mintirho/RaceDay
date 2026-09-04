@@ -1,0 +1,26 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# SQL Server
+*.mdf
+*.ldf
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Build outputs
+bin/
+obj/
+Debug/
+Release/
+
+# Logs
+*.log
